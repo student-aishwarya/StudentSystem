@@ -1,26 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\CoursesController;
-use App\Http\Controllers\BatchController;
-use App\Http\Controllers\EnrollmentController;
-
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\TrashController;
 
 
 Route::get('/', function () {
     return view('layout');
 });
 
-Route::resource('students',StudentController::class);
-Route::resource('teachers',TeacherController::class);
-Route::resource('courses',CoursesController::class);
-Route::resource('batches',BatchController::class);
-Route::resource('enrollments',EnrollmentController::class);
-
-
-
+Route::resource('notes',NoteController::class);
+Route::resource('reminders',ReminderController::class);
+Route::resource('archives',ArchiveController::class);
+Route::get('/notes/{id}/archive', [ArchiveController::class, 'archive'])->name('notes.archive');
+Route::resource('trashes',TrashController::class);
+Route::get('/notes/{id}/trash', [TrashController::class, 'trash'])->name('notes.trash');
 
 
 

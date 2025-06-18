@@ -2,118 +2,95 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <title>Student-System</title>
-    <style>
-        .sidebar {
-            margin: 0;
-            padding: 0;
-            width: 200px;
-            background-color: #f1f1f1;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keep Notes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            keepYellow: '#fbbc04'
+          }
         }
-
-        /* Sidebar links */
-        .sidebar a {
-            display: block;
-            color: black;
-            padding: 16px;
-            text-decoration: none;
-        }
-
-        /* Active/current link */
-        .sidebar a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        /* Links on mouse-over */
-        .sidebar a:hover:not(.active) {
-            background-color: #555;
-            color: white;
-        }
-
-        /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-        div.content {
-            margin-left: 200px;
-            padding: 1px 16px;
-            height: 1000px;
-        }
-
-        /* On screens that are less than 700px wide, make the sidebar into a topbar */
-        @media screen and (max-width: 700px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-
-            .sidebar a {
-                float: left;
-            }
-
-            div.content {
-                margin-left: 0;
-            }
-        }
-
-        /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
-        @media screen and (max-width: 400px) {
-            .sidebar a {
-                text-align: center;
-                float: none;
-            }
-        }
-    </style>
-
-
-
+      }
+    };
+  </script>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 </head>
 
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="#">
-                        <h2>Student Management System</h2>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+<body class="bg-white font-sans">
+
+  <!-- Navbar -->
+  <nav class="flex items-center justify-between px-4 py-2 bg-white border-b shadow-sm">
+    <div class="flex items-center space-x-3">
+      <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" class="w-8 h-8" />
+      <span class="text-xl font-semibold text-gray-800">Keep</span>
+    </div>
 
 
-                </nav>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <!-- The sidebar -->
-                <div class="sidebar">
-                    <a class="active" href="#home">Home</a>
-                    <a href="{{ url('/students')}}">Student</a>
-                    <a href="{{ url('/teachers')}}">Teacher</a>
-                     <a href="{{ url('/courses')}}">Courses</a>
-                    <a href="{{ url('/batches')}}">Batches</a>
-                    <a href="{{ url('/enrollments')}}">Enrollments</a>
-                    
-
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="content">
-                    @yield('content')
-                </div>
+    <form action="{{ url('/notes') }}" method="GET" class="flex items-center w-1/2 relative">
+      <button type="submit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+        <i class="fas fa-search"></i>
+      </button>
+      <input type="text" name="search" value="{{ request('search') }}" placeholder="Search"
+        class="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full border border-gray-300 focus:outline-none" />
+    </form>
 
 
-            </div>
+    <div class="flex space-x-4 items-center">
+      <div class="w-8 h-8 bg-teal-600 text-white font-bold flex items-center justify-center rounded-full">A</div>
+    </div>
+  </nav>
 
+  <div class="flex">
 
+    <!-- Sidebar -->
+    <aside class="w-60 bg-white border-r min-h-screen pt-6 px-4">
+      <nav class="space-y-1 text-sm">
+
+        <!-- Notes -->
+        <a href="/notes"
+          class="flex items-center px-4 py-2 font-semibold text-base rounded-lg 
+                {{ request()->is('notes') ? 'bg-yellow-100 text-yellow-700 font-medium' : 'text-gray-700 hover:bg-gray-200' }}">
+          <i class="fa-solid fa-note-sticky mr-10"></i>
+          Notes
+        </a>
+
+        <!-- Reminders -->
+        <a href="/reminders"
+          class="flex items-center px-4 py-2 rounded-lg font-semibold text-base 
+                {{ request()->is('reminders') ? 'bg-yellow-100 text-yellow-700 font-medium' : 'text-gray-700 hover:bg-gray-200' }}">
+          <i class="fa-regular fa-bell mr-10"></i>
+          Reminders
+        </a>
+
+        <!-- Archives -->
+        <a href="/archives"
+          class="flex items-center px-4 py-2 rounded-lg font-semibold text-base 
+                {{ request()->is('archives') ? 'bg-yellow-100 text-yellow-700 font-medium' : 'text-gray-700 hover:bg-gray-200' }}">
+          <i class="fa-solid fa-file-arrow-down mr-10"></i>
+          Archive
+        </a>
+
+        <!-- Bin -->
+        <a href="/trashes"
+          class="flex items-center px-4 py-2 rounded-lg font-semibold text-base 
+                {{ request()->is('trashes') ? 'bg-yellow-100 text-yellow-700 font-medium' : 'text-gray-700 hover:bg-gray-200' }}">
+          <i class="fa-regular fa-trash-can mr-10"></i>
+          Bin
+        </a>
+
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 bg-white">
+      @yield('content')
+    </main>
+  </div>
 
 </body>
 
